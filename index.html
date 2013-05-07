@@ -55,12 +55,32 @@ cap: This is my story.
 ~
 
 ]
-cap: It used to be a simple story
+cap: It used to be a simple story,
 
 +cap: up until The Primate called me to his chambers.
 ~
 
-]:0 500
+]tall:-50 -500
+cap: It was cold, up in the tower.
+
+cap: Our Primate did not believe in warmth.
+~
+
+primate bleft: Shariputra, my son.
+~
+
+sari bright: Yes, father?
+~
+
+primate bleft: Sit at my feet, Shariputra. I have great news for you.
+~
+
++primate:  Great indeed.
+
+]:0 0 2.5 0
+primate thought: But I sort of feel Merb should help me out with the writing here, so for now, this is...
+
+]:50 -1000
 THE END
                         </textarea>
                     </li>
@@ -89,7 +109,7 @@ $(function(){
                 btn.prop('disabled', true);
                 cnvs.css('display', 'block').animate({
                     width: $(window).width() * .75,
-                    height: $(window).height() * .75
+                    height: '30em'
                 }, function(){
                     panelz.load(cnvs, btn.next().next().val());
                     // We just lost cnvs, because panelz.load switches the element we give it, but does not give it back. It's just bad API design, and I will fix it soon. FIXME Till then we patch:
