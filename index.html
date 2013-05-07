@@ -1,8 +1,14 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <meta charset="utf-8">
         <title>afortiori</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" type="text/css" href="normalize.min.css">
+        <link rel="stylesheet" type="text/css" href="pretty.css">
+        <link rel="stylesheet" type="text/css" href="panelz.css">
     </head>
     <body>
         <section id="content">
@@ -10,7 +16,7 @@
                 <h1>afortiori</h1>
                 <p>This site is the skewed mirror of a role-playing game I'm playing with my friends, but I aim to make it as accessible as possible for outsiders as well.</p>
                 <nav>
-                <h2>Table of contents</h2>
+                    <h2>Table of contents</h2>
                     <ul id="toc">
                         <li class="headlnk"><a href="#background">Background</a>: General knowledge of the world</li>
                         <li class="headlnk"><a href="#ourhero">Our Hero</a>: Being the only character thus far</li>
@@ -35,7 +41,29 @@
             <section>
                 <h2 id="thestory">The Story</h2>
                 <ul>
-                    <li>Scene I, in which Sariputra packs his shit and gets ready to leave.</li>
+                    <li>
+                        Scene I, in which Sariputra packs his shit and gets ready to leave.
+                        <button class="panelz" disabled>You must enable javascript to watch this</button><textarea class="panelz">
+]noborder
+:Click to advance the story
+~
+
+]:500 50
+cap: My name is Sariputra.
+
+cap: This is my story.
+~
+
+]
+cap: It used to be a simple story
+
++cap: up until The Primate called me to his chambers.
+~
+
+]:0 500
+THE END
+                        </textarea>
+                    </li>
                 </ul>
             </section>
             <section>
@@ -46,5 +74,45 @@
                 <p>yes yes lets play already</p>
             </section>
         </section>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript">window.jQuery || document.write('<script src="jquery-1.9.1.min.js"><\/script>')</script>
+        <script src="//israellevin.github.io/panelz/panelz.js"></script>
+        <script type="text/javascript">window.jQuery || document.write('<script src="panelz.js"><\/script>')</script>
+        <script type="text/javascript">
+$(function(){
+    $('button.panelz').each(function(){
+        var btn = $(this).text('play').prop('disabled', false);
+        var cnvs = $('<div class="panelz">');
+        btn.after(cnvs).click(function(){
+            if(!btn.hasClass('active')){
+                $('button.panelz.active').click();
+                btn.prop('disabled', true);
+                cnvs.css('display', 'block').animate({
+                    width: $(window).width() * .75,
+                    height: $(window).height() * .75
+                }, function(){
+                    panelz.load(cnvs, btn.next().next().val());
+                    // We just lost cnvs, because panelz.load switches the element we give it, but does not give it back. It's just bad API design, and I will fix it soon. FIXME Till then we patch:
+                    cnvs = btn.next();
+                    cnvs.unbind('mousedown').click(function(){
+                        panelz.go(1);
+                    });
+                    panelz.go(1);
+                    btn.text('stop').prop('disabled', false).addClass('active');
+                });
+            }else if('stop' === btn.text()){
+                btn.prop('disabled', true);
+                panelz.unload();
+                // And again with the same FIXME silliness.
+            cnvs = btn.next();
+                cnvs.fadeOut(function(){
+                    cnvs.css({width: '1em', height: '1em'});
+                    btn.text('play').prop('disabled', false).removeClass('active');
+                });
+            }
+        });
+    });
+});
+        </script>
     </body>
 </html>
