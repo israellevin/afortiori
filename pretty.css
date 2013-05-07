@@ -1,0 +1,14 @@
+body {
+    font-size: 1em;
+    line-height: 1.4;
+}
+
+#content
+{
+    padding: 1em;
+}
+
+.script
+{
+    display: none;
+}
