@@ -96,7 +96,7 @@ THE END
         </section>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript">window.jQuery || document.write('<script src="jquery-1.9.1.min.js"><\/script>')</script>
-        <script src="//israellevin.github.io/panelz/panelz.js"></script>
+            <script src="//raw.github.com/israellevin/panelz/master/panelz.js"></script>
         <script type="text/javascript">window.jQuery || document.write('<script src="panelz.js"><\/script>')</script>
         <script type="text/javascript">
 $(function(){
@@ -111,10 +111,7 @@ $(function(){
                     width: $(window).width() * .75,
                     height: '30em'
                 }, function(){
-                    panelz.load(cnvs, btn.next().next().val());
-                    // We just lost cnvs, because panelz.load switches the element we give it, but does not give it back. It's just bad API design, and I will fix it soon. FIXME Till then we patch:
-                    cnvs = btn.next();
-                    cnvs.unbind('mousedown').click(function(){
+                    panelz.load(cnvs, btn.next().next().val()).click(function(){
                         panelz.go(1);
                     });
                     panelz.go(1);
@@ -122,10 +119,7 @@ $(function(){
                 });
             }else if('stop' === btn.text()){
                 btn.prop('disabled', true);
-                panelz.unload();
-                // And again with the same FIXME silliness.
-            cnvs = btn.next();
-                cnvs.fadeOut(function(){
+                panelz.unload().fadeOut(function(){
                     cnvs.css({width: '1em', height: '1em'});
                     btn.text('play').prop('disabled', false).removeClass('active');
                 });
