@@ -43,9 +43,9 @@
                 <ul>
                     <li>
                         Scene I, in which Sariputra packs his shit and gets ready to leave.
-                        <button class="panelz" disabled>You must enable javascript to watch this</button><textarea class="panelz">
+                        <button class="panelz">play</button><textarea class="panelz">
 ]noborder
-:Click to advance the story
+:Click, swipe or use the arrows to advance the story
 ~
 
 ]:500 50
@@ -94,37 +94,47 @@ THE END
                 <p>yes yes lets play already</p>
             </section>
         </section>
+        <div id="panelz"></div>
+        <button class="panelz" id="closer">close</button>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript">window.jQuery || document.write('<script src="jquery-1.9.1.min.js"><\/script>')</script>
-            <script src="//raw.github.com/israellevin/panelz/master/panelz.js"></script>
-        <script type="text/javascript">window.jQuery || document.write('<script src="panelz.js"><\/script>')</script>
+        <script src="//raw.github.com/israellevin/panelz/master/panelz.js"></script>
+        <script type="text/javascript">window.panelz || document.write('<script src="panelz.js"><\/scripanelz>')</script>
+        <script src="//raw.github.com/EightMedia/hammer.js/master/dist/jquery.hammer.js"></script>
         <script type="text/javascript">
 $(function(){
-    $('button.panelz').each(function(){
-        var btn = $(this).text('play').prop('disabled', false);
-        var cnvs = $('<div class="panelz">');
-        btn.after(cnvs).click(function(){
-            if(!btn.hasClass('active')){
-                $('button.panelz.active').click();
-                btn.prop('disabled', true);
-                cnvs.css('display', 'block').animate({
-                    width: $(window).width() * .75,
-                    height: '30em'
-                }, function(){
-                    panelz.load(cnvs, btn.next().next().val()).click(function(){
-                        panelz.go(1);
-                    });
-                    panelz.go(1);
-                    btn.text('stop').prop('disabled', false).addClass('active');
-                });
-            }else if('stop' === btn.text()){
-                btn.prop('disabled', true);
-                panelz.unload().fadeOut(function(){
-                    cnvs.css({width: '1em', height: '1em'});
-                    btn.text('play').prop('disabled', false).removeClass('active');
-                });
+    var win = $(window),
+        screen = $('div#panelz'),
+        closer = $('#closer');
+
+    $('button.panelz').not(closer).fadeIn().click(function(e){
+        var scrw = screen.innerWidth(), scrh = screen.innerHeight(),
+            winw = win.width(), winh = win.height(),
+            ratio = (scrw / scrh > winw / winh) ?
+                    winw / scrw :
+                    winh / scrh,
+            button = $(this);
+
+        screen.css({
+            width: '100%',
+            height: '100%',
+            fontSize: function(i, v){
+                return ratio * v.slice(0, -2);
             }
+        }).fadeIn(function(){
+            panelz.load(screen, button.next().val()).
+            click(function(){
+                panelz.go(1);
+            });
+            panelz.go(1);
+            closer.fadeIn();
         });
+    //DEBUG
+        }).click();
+    closer.click(function(e){
+        closer.fadeOut();
+        panelz.unload();
+        screen.fadeOut();
     });
 });
         </script>

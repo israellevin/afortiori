@@ -8,7 +8,33 @@ body {
     padding: 1em;
 }
 
-.script
+.panelz
 {
     display: none;
+}
+
+div#panelz
+{
+    position: fixed;
+    top: 0em;
+    left: 0em;
+    width: 30em;
+    height: 30em;
+    display: none;
+    overflow: hidden;
+    background-color: #ffeedd;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    border: 0.5em solid black;
+    border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+}
+
+button#closer
+{
+    position: fixed;
+    top: 1em;
+    right: 1em;
 }
