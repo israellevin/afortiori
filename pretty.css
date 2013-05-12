@@ -1,6 +1,6 @@
 body {
     font-size: 1em;
-    line-height: 1.4;
+    line-height: 1.4em;
 }
 
 #content
@@ -18,8 +18,8 @@ div#panelz
     position: fixed;
     top: 0em;
     left: 0em;
-    width: 30em;
-    height: 30em;
+    width: 18em;
+    height: 32em;
     display: none;
     overflow: hidden;
     background-color: #ffeedd;

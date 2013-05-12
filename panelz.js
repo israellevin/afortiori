@@ -11,18 +11,23 @@
 
         // We always maintain a reference to the current panel. At this early point, the reference is initialized to a dummy panel that always returns position and size of 0 (so that we have a starting position) and can even automagically create the first panel for you if you try to add a chunk of text to it.
         cur: {
-            position: function(){return {left: 0, top: 0};},
+            get: function(){return {style: {left: '0em', top: '0em'}};},
             outerWidth: function(){return 0;},
             outerHeight: function(){return 0;},
             point: function(){return {left: 0, top: 0};},
             chunk: function(clss, text){return Canvas.panel('','','',[]).chunk(clss, text);}
         },
 
-        // We also have an internal bookmark to keep the index of the current line (set to -1 as we haven't even started),
+        // We also hold a dictionary of labeled panels, which can be referenced later for all sorts of cool stuff,
+        labels: {},
+        // an internal bookmark to keep the index of the current line (set to -1 as we haven't even started),
         bookmark: -1,
-        // and an undo stack
+        // and the scripted position. Note that this does not have to be the real position. Users can scroll, animations can be stopped, and who knows what the UI is doing, but the scripted position disregards all this nonsense and pretends it lives in a perfect world. That why we need it and can't make do with position().
+        pos: {left: 0, top: 0},
+
+        // Now, all we need is an undo stack
         undostack: [],
-        // with its own undo function. This can be invoked with a function to store and an optional data object for that function (both will be closured) or empty, to execute the top of the stack.
+        // with its own undo function that can either be invoked with a function to store and an optional data object (both will be closured), or with no arguments to execute the top of the stack.
         undo: function(f, d){
             if('function' === typeof f){
                 Canvas.undostack.push(
@@ -36,11 +41,6 @@
                 if(Canvas.undostack.length > 0) Canvas.undostack.pop()();
             }
         },
-
-        // Now we need a dictionary of labeled panels, which can be referenced later for all sorts of cool stuff,
-        labels: {},
-        // and the scripted position. Note that this does not have to be the real position. Users can scroll, animations can be stopped, and who knows what the UI is doing, but the scripted position disregards all this nonsense and pretends he lives in a perfect world. That why we need it and can't make do with position().
-        pos: {left: 0, top: 0},
 
         // With this we can create and draw panels (that can create and draw chunks of text). The parameters for a new panel are a string of space separated CSS classes (which define the look of the panes) and an array of up to four numbers which determines where it will be drawn (x offset, y offset, origin on anchor and destination on target - this will be made clearer later. I hope).
         panel: function(labl, clss, posi, ancr){
@@ -59,10 +59,10 @@
             // But the anchor doesn't have to be the top-left corner of the panel (as is the CSS default). Instead, the corners are numbered clockwise from 0 to 3 starting at the top-left. Fractions are used to refer to points between the corners and all negative numbers refer to the center of the panel, just in case you ever wanna go there. Since this corner annotation is used both on the anchor panel and on the panel that is anchored to it (AKA "buoy panel"), we supply the panel with a function that translates it into CSS compatible coordinates.
             p.point = function(corner) {
 
-                // First we need the size of the panel.
+                // First we need the size of the panel, in ems.
                 var
-                    w = p.outerWidth(),
-                    h = p.outerHeight(),
+                    w = p.get(0).offsetWidth / Canvas.fontsize,
+                    h = p.get(0).offsetHeight / Canvas.fontsize,
 
                 // Now we start with the base CSS location (top-left corner, which we call 0) and work from there.
                     o = {left: 0, top: 0};
@@ -97,8 +97,8 @@
                 return o;
             };
 
-            // By default, the new panel will be 5 pixels to the left of the anchor point
-            p.left = 5;
+            // By default, the new panel will be 1 em to the left of the anchor point
+            p.left = 1;
             // while keeping the same height.
             p.top = 0;
             // The default anchor point is 1, which is the top-right corner,
@@ -123,18 +123,24 @@
             // Now we can calculate the desired left and top properties of the panel. This is a function because we will do it again every time the involved panels change, but don't worry, we will also call it as soon as we finish defining it.
             p.place = function(){
 
-                // We get some basic numbers:
+                // We start with basic measurements.
                 var
-                    // The position of the anchor panel,
-                    o = p.anchor.position(),
-                    // the position on that panel
-                    a = p.anchor.point(p.o),
-                    // and the offset between the destination point and the 0 point (top-left corner) of the new panel.
-                    d = p.point(p.d);
-                // and we set the position of the panel.
+                    // The anchor element,
+                    anchor = p.anchor.get(0),
+                    // the origin point on the anchor
+                    origin = p.anchor.point(p.o),
+                    // and the destination point on the current panel.
+                    destin = p.point(p.d);
+
+                // Then we get the anchor's top left in ems (look ma no jquery),
+                anchor = {
+                    top: parseFloat(anchor.style.top.slice(0, -2), 10),
+                    left: parseFloat(anchor.style.left.slice(0, -2), 10)
+                };
+                // and set the position of the panel.
                 p.css({
-                    'left': (o.left + a.left + p.left - d.left) + 'px',
-                    'top': (o.top + a.top + p.top - d.top) + 'px'
+                    'left': (anchor.left + origin.left + p.left - destin.left) + 'em',
+                    'top': (anchor.top + origin.top + p.top - destin.top) + 'em'
                 });
             };
             p.place();
@@ -452,9 +458,11 @@
         // Give us a string with a script and a DOM element to use as a Frame and we will set up the show.
         load: function(framee, scriptstr, bookmark){
 
-            // To protect the original frame from harm, we save it
+            // To protect the original frame from harm, we save it,
             framee = $(framee);
-            // and plant an empty Canvas in an emptied clone of it.
+            // measure its (and the future Canvas's) computed font size so we can convert pixels to ems,
+            Canvas.fontsize = parseFloat(framee.css('fontSize').slice(0, -2), 10);
+            // and plant the Canvas in an emptied clone of it.
             Frame = framee.clone().empty().append(Canvas);
 
             // Then we initialize the Story with the lines of the script,
