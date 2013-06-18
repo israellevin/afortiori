@@ -172,10 +172,12 @@ THE END
 $(function(){
     var win = $(window),
         screen = $('#panelz'),
-        closer = $('#closer');
+        closer = $('#closer'),
+        state = -1; // 0 = loading, 1 = running panelz.
 
     $('button.play').fadeIn().click(function(e){
-        if(true === closer.prop('disabled')) return;
+        if(state > -1) return true;
+        state = 0;
         closer.prop('disabled', true);
 
         var button = $(this),
@@ -193,19 +195,22 @@ $(function(){
         }).fadeIn(function(){
             panelz.load(screen, button.next().val());
             panelz.go(1);
+            state = 1;
             closer.prop('disabled', false).fadeIn();
         });
     });
 
     $('body').hammer().on('tap swipe drag', '#panelz', function(e){
+        if(state < 1) return true;
         e.gesture.preventDefault();
         if('drag' === e.type) return false;
-        if('swipe' === e.type && 'right' === e.gesture.direction) panelz.go(-1);
+        else if('swipe' === e.type && 'right' === e.gesture.direction) panelz.go(-1);
         else panelz.go(1);
         return false;
     });
 
     $(document).keydown(function(e){
+        if(state < 1) return true;
         if(39 === e.which || 32 === e.which){
             panelz.go(1);
         }else if(37 === e.which){
@@ -214,15 +219,19 @@ $(function(){
             closer.click();
         }else{
             console.log('unknown key', e.which);
+            return true;
         }
+        return false;
     });
 
     closer.click(function(e){
-        if(true === closer.prop('disabled')) return;
+        if(state < 1) return true;
+        state = 0;
         closer.prop('disabled', true);
         panelz.unload();
         screen.add(closer).fadeOut(function(){
             closer.prop('disabled', false);
+            state = -1;
         });
     });
 });
