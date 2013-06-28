@@ -1,8 +1,12 @@
 div.canvas
 {
-    position: relative;
     width: 100%;
     height: 100%;
+    position: relative;
+    background-image:url('img/wall.png');
+    background-repeat: repeat;
+    min-width: 300em;
+    min-height: 300em;
 }
 
 /* Panels */
@@ -10,25 +14,23 @@ div.canvas
 div.panel
 {
     position: absolute;
-    width: 15em;
+    width: 20em;
     min-height: 5em;
+    background-color:black;
     border: 0.2em solid #9b7c79;
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
     border-radius: 1em;
-    background-color: #fff9ef;
 }
 
 div.noborder
 {
-    width: auto !important;
-    height: auto !important;
-    min-width: 1em !important;
-    min-height: 1em !important;
-    padding: 0em !important;
-    margin: 0em !important;
+    width: 22em;
+    height: 12em;
     border: 0em solid black !important;
-    background-color: #ffeedd;
+    background: none;
+    color: yellow;
+    font-weight: bold;
 }
 
 div.noborder > div
@@ -46,28 +48,21 @@ div.tall
 div.panel div
 {
     position: relative;
-    float: left;
     padding: 0.5em;
-}
-
-div.cap
-{
-    margin: 0.5em 1em 0.5em 1em;
-    border: 0em solid black;
 }
 
 /* Balloons */
 
-
 div.b, div.thought, div.bleft, div.bright
 {
     position: relative;
-    color: #000022;
+    clear: both;
     margin: 0.5em 1em 0.5em 1em;
     border: 0.2em solid #9b7c79;
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
     border-radius: 1em;
+    color: white;
 }
 
 div.thought
@@ -77,7 +72,12 @@ div.thought
 
 div.bleft
 {
-    margin-left: 1em;
+    float: left !important;
+}
+
+div.bright
+{
+    float: right !important;
 }
 
 div.bleft:before
@@ -91,11 +91,6 @@ div.bleft:before
    border-top: 0.6em solid transparent;
    border-right: 1em solid #9b7c79;
    border-bottom: 0.2em solid transparent;
-}
-
-div.bleft
-{
-    margin-right: 1em;
 }
 
 div.bright:after
@@ -113,12 +108,12 @@ div.bright:after
 
 /* Text */
 
-div.big
+div.shariputra
 {
-    font-size: 2em;
+    color: #ffaa33;
 }
 
-div.primate
+div.barnabas
 {
-    color: #aa6633;
+    color: #33aaff;
 }
