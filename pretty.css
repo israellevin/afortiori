@@ -22,14 +22,7 @@ div#panelz
     height: 36em;
     display: none;
     overflow: hidden;
-    background-color: #ffeedd;
-    box-sizing:border-box;
-    -moz-box-sizing:border-box;
-    -webkit-box-sizing:border-box;
-    border: 0.5em solid black;
-    border-radius: 0.5em;
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
+    background-color: black;
 }
 
 button#closer

@@ -1,12 +1,6 @@
 div.canvas
 {
-    width: 100%;
-    height: 100%;
     position: relative;
-    background-image:url('img/wall.png');
-    background-repeat: repeat;
-    min-width: 300em;
-    min-height: 300em;
 }
 
 /* Panels */
@@ -17,7 +11,7 @@ div.panel
     width: 20em;
     min-height: 5em;
     background-color:black;
-    border: 0.2em solid #9b7c79;
+    border: 0.2em solid gray;
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
     border-radius: 1em;
@@ -41,6 +35,14 @@ div.noborder > div
 div.tall
 {
     min-height: 20em;
+}
+
+div.wall
+{
+    background-image:url('img/wall.png');
+    background-repeat: repeat;
+    min-width: 300em;
+    min-height: 300em;
 }
 
 /* Chunks */
@@ -116,4 +118,27 @@ div.shariputra
 div.barnabas
 {
     color: #33aaff;
+}
+
+div.didymus
+{
+    color: red;
+    border-color: red;
+}
+
+div.maimonides
+{
+    color: green;
+    border-color: green;
+}
+
+
+div.didymus:before, div.didymus:after
+{
+    border-color: transparent red;
+}
+
+div.maimonides:before, div.maimonides:after 
+{
+    border-color: transparent green;
 }
