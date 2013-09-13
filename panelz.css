@@ -45,6 +45,34 @@ div.wall
     min-height: 300em;
 }
 
+div.deg05
+{
+    transform: rotate(05deg);
+    -ms-transform: rotate(05deg);
+    -webkit-transform: rotate(05deg);
+}
+
+div.deg10
+{
+    transform: rotate(10deg);
+    -ms-transform: rotate(10deg);
+    -webkit-transform: rotate(10deg);
+}
+
+div.deg30
+{
+    transform: rotate(30deg);
+    -ms-transform: rotate(30deg);
+    -webkit-transform: rotate(30deg);
+}
+
+div.deg50
+{
+    transform: rotate(50deg);
+    -ms-transform: rotate(50deg);
+    -webkit-transform: rotate(50deg);
+}
+
 /* Chunks */
 
 div.panel div
